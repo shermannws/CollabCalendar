@@ -13,8 +13,12 @@ export function AuthProvider({ children }) {
   const [currentUser, setCurrentUser] = useState()
   const [loading, setLoading] = useState(true)
 
-  function signupWithEmail(email, password) {
-    return auth.createUserWithEmailAndPassword(email, password)
+  function signupWithEmail(email, password, name) {
+    return auth.createUserWithEmailAndPassword(email, password).then(userCredential => {
+      userCredential.user.updateProfile({
+        displayName: name
+      })
+    })
   }
 
   function loginWithEmail(email, password) {
@@ -42,12 +46,17 @@ export function AuthProvider({ children }) {
     return currentUser.updatePassword(password)
   }
 
+  function updateDisplayName(name) {
+    return currentUser.updateProfile({
+      displayName: name
+    })
+  }
+
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged(user => {
       setCurrentUser(user)
       setLoading(false)
     })
-
     return unsubscribe
   }, [])
 
@@ -59,7 +68,8 @@ export function AuthProvider({ children }) {
     resetPassword,
     updateEmail,
     updatePassword,
-    loginWithGoogle
+    loginWithGoogle,
+    updateDisplayName
   }
 
   return (

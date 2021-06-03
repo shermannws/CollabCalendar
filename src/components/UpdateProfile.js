@@ -4,10 +4,11 @@ import { useAuth } from "../contexts/AuthContext"
 import { Link, useHistory } from "react-router-dom"
 
 export default function UpdateProfile() {
+  const nameRef = useRef()
   const emailRef = useRef()
   const passwordRef = useRef()
   const passwordConfirmRef = useRef()
-  const { currentUser, updatePassword, updateEmail } = useAuth()
+  const { currentUser, updatePassword, updateEmail, updateDisplayName } = useAuth()
   const [error, setError] = useState("")
   const [loading, setLoading] = useState(false)
   const history = useHistory()
@@ -28,10 +29,13 @@ export default function UpdateProfile() {
     if (passwordRef.current.value) {
       promises.push(updatePassword(passwordRef.current.value))
     }
+    if (nameRef.current.value !== currentUser.displayName) {
+      promises.push(updateDisplayName(nameRef.current.value))
+    }
 
     Promise.all(promises)
       .then(() => {
-        history.push("/")
+        history.push("/profile")
       })
       .catch(() => {
         setError("Failed to update account")
@@ -48,6 +52,15 @@ export default function UpdateProfile() {
           <h2 className="text-center mb-4">Update Profile</h2>
           {error && <Alert variant="danger">{error}</Alert>}
           <Form onSubmit={handleSubmit}>
+            <Form.Group id="display-name">
+              <Form.Label>Display Name</Form.Label>
+              <Form.Control
+                type="text"
+                ref={nameRef}
+                required
+                defaultValue={currentUser.displayName}
+              />
+            </Form.Group>
             <Form.Group id="email">
               <Form.Label>Email</Form.Label>
               <Form.Control
@@ -80,7 +93,7 @@ export default function UpdateProfile() {
         </Card.Body>
       </Card>
       <div className="w-100 text-center mt-2">
-        <Link to="/">Cancel</Link>
+        <Link to="/profile">Cancel</Link>
       </div>
     </>
   )
