@@ -6,7 +6,7 @@ export default function Dashboard() {
   return (
     <>
       <div>
-        This is the Dashboard
+        This is the Dashboard to be updated.
       </div>
     </>
   )
