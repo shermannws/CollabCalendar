@@ -35,7 +35,7 @@ export default function Dashboard() {
       <div className="w-100 mb-5">
         <MyMonthlyCalendar/>       
       </div>
-      <div className="w-50 pl-5">
+      <div className="w-50 pl-5 mt-5">
         <ListGroup className="w-100 mb-5">
           <ListGroup.Item><strong>Pending Responses</strong></ListGroup.Item>
 

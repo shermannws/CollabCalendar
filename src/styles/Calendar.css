@@ -649,7 +649,7 @@ video {
 }
 
 .overflow-hidden {
-  overflow: hidden;
+  overflow: auto!important;
 }
 
 .overflow-y-auto {
