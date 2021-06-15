@@ -55,7 +55,7 @@ export default function NavbarPage() {
           </Navbar>
           {error && <Alert variant="danger">{error}</Alert>}
           
-          <Container>
+          <Container className="d-flex align-items-start justify-content-center">
             <Switch>
               <Route exact path="/" component={Dashboard} />
               <Route path="/profile" component={Profile} />

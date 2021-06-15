@@ -1,4 +1,4 @@
-import React, {useState} from 'react'
+import React, { useState } from 'react'
 import { format, subHours, startOfMonth } from 'date-fns'
 import {
   MonthlyBody,
@@ -7,7 +7,7 @@ import {
   MonthlyNav,
   DefaultMonthlyEventItem
 } from '@zach.codes/react-calendar'
-import '@zach.codes/react-calendar/dist/calendar-tailwind.css'
+import '../styles/Calendar.css'
 
 export const MyMonthlyCalendar = () => {
   let [currentMonth, setCurrentMonth] = useState(
@@ -15,7 +15,7 @@ export const MyMonthlyCalendar = () => {
   );
 
   return (
-    <MonthlyCalendar style = {{@zach.codes/react-calendar/dist/calendar-tailwind.css}}
+    <MonthlyCalendar
       currentMonth={currentMonth}
       onCurrentMonthChange={date => setCurrentMonth(date)}
     >
@@ -27,7 +27,7 @@ export const MyMonthlyCalendar = () => {
           { title: 'Meeting with Bob', date: new Date() },
         ]}
       >
-        <MonthlyDay
+        <MonthlyDay className="primary"
           renderDay={data =>
             data.map((item, index) => (
               <DefaultMonthlyEventItem

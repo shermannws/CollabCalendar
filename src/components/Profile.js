@@ -9,7 +9,7 @@ export default function Profile() {
 
   return (
     <>
-      <Card>
+      <Card className="w-100">
         <Card.Body>
           <h2 className="text-center mb-4">Profile</h2>
           {error && <Alert variant="danger">{error}</Alert>}

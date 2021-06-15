@@ -1,9 +1,8 @@
 import React, { useContext, useState, useEffect } from "react"
-import { auth } from "../firebase"
+import { auth, db } from "../firebase"
 import firebase from "firebase/app"
 
 const AuthContext = React.createContext()
-// const db = firebase.firestore()
 
 export function useAuth() {
   return useContext(AuthContext)
@@ -15,8 +14,19 @@ export function AuthProvider({ children }) {
 
   function signupWithEmail(email, password, name) {
     return auth.createUserWithEmailAndPassword(email, password).then(userCredential => {
+      
       userCredential.user.updateProfile({
         displayName: name
+      }).then(() => {
+        db.collection("users").doc(email).set({
+          displayName: name,
+          uid: userCredential.user.uid,
+          isGoogleSignIn: false,
+          events: {
+            confirmed: [],
+            pending: []
+          }
+        }, { merge: true })
       })
     })
   }
@@ -25,10 +35,32 @@ export function AuthProvider({ children }) {
     return auth.signInWithEmailAndPassword(email, password)
   }
 
-  //
   function loginWithGoogle() {
-    return auth.signInWithPopup(new firebase.auth.GoogleAuthProvider())
+    return auth.signInWithPopup(new firebase.auth.GoogleAuthProvider()).then(userCredential => {
+      
+      const userDocRef = db.collection('users').doc(userCredential.user.email);
+      userDocRef.get().then((doc) => {
+        if (doc.data() === undefined) {
+          db.collection("users").doc(userCredential.user.email).set({
+            displayName: userCredential.user.displayName,
+            uid: userCredential.user.uid,
+            isGoogleSignIn: true,
+            events: {
+              confirmed: [],
+              pending: []
+            }
+          }, { merge: true })
+        } else {
+          db.collection("users").doc(userCredential.user.email).set({
+            displayName: userCredential.user.displayName,
+            uid: userCredential.user.uid,
+            isGoogleSignIn: true,
+          }, { merge: true })
+        }
+      })
+    })
   }
+  
 
   function logout() {
     return auth.signOut()
@@ -38,10 +70,6 @@ export function AuthProvider({ children }) {
     return auth.sendPasswordResetEmail(email)
   }
 
-  function updateEmail(email) {
-    return currentUser.updateEmail(email)
-  }
-
   function updatePassword(password) {
     return currentUser.updatePassword(password)
   }
@@ -49,6 +77,10 @@ export function AuthProvider({ children }) {
   function updateDisplayName(name) {
     return currentUser.updateProfile({
       displayName: name
+    }).then(() => {
+      db.collection("users").doc(currentUser.email).set({
+        displayName: name,
+      }, { merge: true })
     })
   }
 
@@ -66,7 +98,6 @@ export function AuthProvider({ children }) {
     signupWithEmail,
     logout,
     resetPassword,
-    updateEmail,
     updatePassword,
     loginWithGoogle,
     updateDisplayName

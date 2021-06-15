@@ -1,18 +1,26 @@
-import React, { useRef, useState } from "react"
+import React, { useRef, useState, useEffect } from "react"
 import { Form, Button, Card, Alert } from "react-bootstrap"
 import { useAuth } from "../contexts/AuthContext"
 import { Link, useHistory } from "react-router-dom"
+import { db } from "../firebase"
 
 export default function UpdateProfile() {
   const nameRef = useRef()
-  const emailRef = useRef()
   const passwordRef = useRef()
   const passwordConfirmRef = useRef()
-  const { currentUser, updatePassword, updateEmail, updateDisplayName } = useAuth()
+  const { currentUser, updatePassword, updateDisplayName } = useAuth()
   const [error, setError] = useState("")
   const [loading, setLoading] = useState(false)
   const history = useHistory()
+  const [isGoogle, setIsGoogle] = useState(false)
 
+  useEffect(() => {
+    db.collection("users").doc(currentUser.email).get().then((doc) => {
+      doc.data().isGoogleSignIn ? setIsGoogle(true) : setIsGoogle(false)
+    })
+  }, [])
+
+  
   function handleSubmit(e) {
     e.preventDefault()
     if (passwordRef.current.value !== passwordConfirmRef.current.value) {
@@ -23,9 +31,6 @@ export default function UpdateProfile() {
     setLoading(true)
     setError("")
 
-    if (emailRef.current.value !== currentUser.email) {
-      promises.push(updateEmail(emailRef.current.value))
-    }
     if (passwordRef.current.value) {
       promises.push(updatePassword(passwordRef.current.value))
     }
@@ -47,7 +52,7 @@ export default function UpdateProfile() {
 
   return (
     <>
-      <Card>
+      <Card className="w-100">
         <Card.Body>
           <h2 className="text-center mb-4">Update Profile</h2>
           {error && <Alert variant="danger">{error}</Alert>}
@@ -65,36 +70,64 @@ export default function UpdateProfile() {
               <Form.Label>Email</Form.Label>
               <Form.Control
                 type="email"
-                ref={emailRef}
                 required
+                disabled
                 defaultValue={currentUser.email}
               />
             </Form.Group>
-            <Form.Group id="password">
-              <Form.Label>Password</Form.Label>
-              <Form.Control
-                type="password"
-                ref={passwordRef}
-                placeholder="Leave blank to keep the same"
-              />
-            </Form.Group>
-            <Form.Group id="password-confirm">
-              <Form.Label>Password Confirmation</Form.Label>
-              <Form.Control
-                type="password"
-                ref={passwordConfirmRef}
-                placeholder="Leave blank to keep the same"
-              />
-            </Form.Group>
+            {
+              isGoogle ?
+              <>
+              <Form.Group id="password">
+                <Form.Label>Password</Form.Label>
+                <Form.Control
+                  type="password"
+                  ref={passwordRef}
+                  placeholder="Leave blank to keep the same"
+                  disabled
+                />
+              </Form.Group>
+              <Form.Group id="password-confirm">
+                <Form.Label>Password Confirmation</Form.Label>
+                <Form.Control
+                  type="password"
+                  ref={passwordConfirmRef}
+                  placeholder="Leave blank to keep the same"
+                  disabled
+                />
+              </Form.Group>
+              </>
+              :
+              <>
+              <Form.Group id="password">
+                <Form.Label>Password</Form.Label>
+                <Form.Control
+                  type="password"
+                  ref={passwordRef}
+                  placeholder="Leave blank to keep the same"
+                />
+              </Form.Group>
+              <Form.Group id="password-confirm">
+                <Form.Label>Password Confirmation</Form.Label>
+                <Form.Control
+                  type="password"
+                  ref={passwordConfirmRef}
+                  placeholder="Leave blank to keep the same"
+                />
+              </Form.Group>
+              </>
+            }
+            
             <Button disabled={loading} className="w-100" type="submit">
               Update
             </Button>
           </Form>
         </Card.Body>
+        <div className="w-100 text-center mt-2 mb-4">
+          <Link to="/profile">Cancel</Link>
+        </div>
       </Card>
-      <div className="w-100 text-center mt-2">
-        <Link to="/profile">Cancel</Link>
-      </div>
+      
     </>
   )
 }
