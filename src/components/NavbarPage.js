@@ -3,9 +3,11 @@ import { Navbar, Image, NavDropdown, Alert, Container } from "react-bootstrap"
 import { useAuth } from "../contexts/AuthContext"
 import { useHistory, Switch, Route } from "react-router-dom"
 import logo from "../images/logo-name.png"
+import NewGroupPage from "./NewGroupPage"
 import Dashboard from "./Dashboard"
 import Profile from "./Profile"
 import UpdateProfile from "./UpdateProfile"
+
 
 export default function NavbarPage() {
   const [error, setError] = useState("")
@@ -60,6 +62,7 @@ export default function NavbarPage() {
               <Route exact path="/" component={Dashboard} />
               <Route path="/profile" component={Profile} />
               <Route path="/update-profile" component={UpdateProfile} />
+              <Route path="/new-group-page" component={NewGroupPage} />
             </Switch>
           </Container>
           

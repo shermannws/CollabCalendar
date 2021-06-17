@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react"
 import { ListGroup } from "react-bootstrap"
 import {MyMonthlyCalendar} from "./Calendar"
 import { useAuth } from "../contexts/AuthContext"
+import { Link } from "react-router-dom"
 
 import { db } from "../firebase"
 
@@ -32,8 +33,14 @@ export default function Dashboard() {
 
   return (
     <>
-      <div className="w-100 mb-5">
-        <MyMonthlyCalendar/>       
+      <div>
+        <div className="w-100 mb-5">
+          <MyMonthlyCalendar/>       
+        </div>
+        <Link to = "/new-group-page" 
+          className="btn btn-primary w-100 mt-2 mb-4 p-2">
+            Create new group
+        </Link>
       </div>
       <div className="w-50 pl-5 mt-5">
         <ListGroup className="w-100 mb-5">

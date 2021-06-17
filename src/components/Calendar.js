@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Card, Badge } from 'react-bootstrap'
+import { Badge } from 'react-bootstrap'
 import { format, subHours, startOfMonth } from 'date-fns'
 import {
   MonthlyBody,

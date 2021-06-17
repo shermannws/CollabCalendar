@@ -13,6 +13,7 @@ function App() {
           <PrivateRoute exact path="/" component={NavbarPage} />
           <PrivateRoute path="/profile" component={NavbarPage} />
           <PrivateRoute path="/update-profile" component={NavbarPage} />
+          <PrivateRoute path="/new-group-page" component={NavbarPage} />
           
           <Route path="/signup" component={CoverPage} />
           <Route path="/login" component={CoverPage} />
