@@ -8,7 +8,6 @@ import Dashboard from "./Dashboard"
 import Profile from "./Profile"
 import UpdateProfile from "./UpdateProfile"
 
-
 export default function NavbarPage() {
   const [error, setError] = useState("")
   const { currentUser, logout } = useAuth()
@@ -63,6 +62,7 @@ export default function NavbarPage() {
               <Route path="/profile" component={Profile} />
               <Route path="/update-profile" component={UpdateProfile} />
               <Route path="/new-group-page" component={NewGroupPage} />
+              
             </Switch>
           </Container>
           

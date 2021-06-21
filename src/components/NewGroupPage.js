@@ -1,15 +1,15 @@
-import React, { useRef, useState } from "react"
+import React, { useRef, useState, useContext } from "react"
 import { Form, Button, Alert, Card } from "react-bootstrap"
 import { useHistory } from "react-router-dom"
 import { useAuth } from "../contexts/AuthContext"
-import MultipleEmail from "./MultipleEmail"
 import { db } from "../firebase"
-
+import MultipleEmail, {UsersContext} from "./MultipleEmail"
 
 export default function NewGroupPage() {
 
  const { currentUser } = useAuth()
  const groupNameRef = useRef()
+ const usersEmails = useContext(UsersContext)
  const history = useHistory()
  const [loading, setLoading] = useState(false)
  const [error, setError] = useState("")
@@ -23,7 +23,14 @@ export default function NewGroupPage() {
   promises.push(db.collection("groups").add({
     groupName: groupNameRef.current.value,
     admins: [currentUser.email, ]
+  }).then(function(docRef) {
+    db.collection("groups").doc(docRef.id).update({
+      users: usersEmails
+    })
+  }).catch(function(error) {
+    console.error("Error adding document: ", error);
   }))
+  
 
   Promise.all(promises)
       .then(() => {
@@ -55,9 +62,9 @@ export default function NewGroupPage() {
               placeholder="Name your group"
             />
           </Form.Group>
-        
-          <MultipleEmail/>
-        
+
+          <MultipleEmail />
+            
           <Button className="w-100 mt-2" type="submit">
             Create group
           </Button>
