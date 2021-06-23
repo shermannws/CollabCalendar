@@ -9,6 +9,7 @@ import { db } from "../firebase"
 export default function Dashboard() {
   const { currentUser } = useAuth()
   const [pendingEvents, setPendingEvents] = useState([])
+  const [groups, setGroups] = useState([])
 
   const fetchEvents = () => {
     const userDocRef = db.collection('users').doc(currentUser.email);
@@ -18,12 +19,21 @@ export default function Dashboard() {
           const eventDocRef = db.collection('events').doc(eventId)
           eventDocRef.get().then((event) => {
             if (event.data() !== undefined) {
-              setPendingEvents(pendingEvents => [...pendingEvents, event.data().title])
+              setPendingEvents(pendingEvents => [...pendingEvents, event.data()])
             }
           })
         })
+        
+        if (doc.data().groupsAdminOf) {
+          doc.data().groupsAdminOf.forEach(groupId => {
+            const groupDocRef = db.collection('groups').doc(groupId)
+            groupDocRef.get().then(group => {
+              setGroups(groups => [...groups, group.data()])
+            })
+          })
+        }
+        
       }
-      
     });
   }
 
@@ -33,7 +43,7 @@ export default function Dashboard() {
 
   return (
     <>
-      <div>
+      <div className="w-100">
         <div className="w-100 mb-5">
           <MyMonthlyCalendar/>       
         </div>
@@ -42,19 +52,20 @@ export default function Dashboard() {
             Create new group
         </Link>
       </div>
+
       <div className="w-50 pl-5 mt-5">
         <ListGroup className="w-100 mb-5">
           <ListGroup.Item><strong>Pending Responses</strong></ListGroup.Item>
 
           {pendingEvents.length === 0 ? 
           (
-            <ListGroup.Item action variant="lght">
+            <ListGroup.Item variant="light">
               You have no events pending your response!
             </ListGroup.Item>
           ) : pendingEvents.map(event => {
             return (
               <ListGroup.Item action variant="warning">
-                {event}
+                {event.title}
               </ListGroup.Item>
           )})}
 
@@ -63,21 +74,18 @@ export default function Dashboard() {
         <ListGroup className="w-100 mb-5">
           <ListGroup.Item><strong>My Groups</strong></ListGroup.Item>
 
-          <ListGroup.Item action variant="info">
-            Group 1
-          </ListGroup.Item>
-          <ListGroup.Item action variant="info">
-            Group 2
-          </ListGroup.Item>
-          <ListGroup.Item action variant="info">
-            Group 3
-          </ListGroup.Item>
-          <ListGroup.Item action variant="info">
-            Group 4
-          </ListGroup.Item>
-          <ListGroup.Item action variant="info">
-            Group 5
-          </ListGroup.Item>
+          {groups.length === 0 ? 
+          (
+            <ListGroup.Item variant="light">
+              You have no groups at the moment.
+            </ListGroup.Item>
+          ) : groups.map(group => {
+            return (
+              <ListGroup.Item action variant="info">
+                {group.groupName}
+              </ListGroup.Item>
+          )})}
+          
         </ListGroup>
       </div>
     </>

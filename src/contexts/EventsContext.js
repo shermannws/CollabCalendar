@@ -2,18 +2,32 @@ import React, { useContext, useState, useEffect } from "react"
 import { auth, db } from "../firebase"
 import firebase from "firebase/app"
 
-const AuthContext = React.createContext()
+const EventsContext = React.createContext()
 
-export function useAuth() {
-  return useContext(AuthContext)
+export function useEventsCRUD() {
+  return useContext(EventsContext)
 }
 
-export function AuthProvider({ children }) {
+export function EventsCRUDProvider({ children }) {
   const [currentUser, setCurrentUser] = useState()
   const [loading, setLoading] = useState(true)
 
-  // Not populating the events field as there might already be pre-existing pending and/or
-  // confirmed events before they even sign up
+  function addEvent() {
+    
+  }
+
+  function readEvent() {
+
+  }
+
+  function updateEvent() {
+
+  }
+
+  function deleteEvent() {
+
+  }
+
   function signupWithEmail(email, password, name) {
     return auth.createUserWithEmailAndPassword(email, password).then(userCredential => {
       
@@ -24,10 +38,10 @@ export function AuthProvider({ children }) {
           displayName: name,
           uid: userCredential.user.uid,
           isGoogleSignIn: false,
-          // events: {
-          //   confirmed: [],
-          //   pending: []
-          // }
+          events: {
+            confirmed: [],
+            pending: []
+          }
         }, { merge: true })
       })
     })
@@ -37,22 +51,28 @@ export function AuthProvider({ children }) {
     return auth.signInWithEmailAndPassword(email, password)
   }
 
-  // Not populating the events field as there might already be pre-existing pending and/or
-  // confirmed events before they even sign up
   function loginWithGoogle() {
     return auth.signInWithPopup(new firebase.auth.GoogleAuthProvider()).then(userCredential => {
       
       const userDocRef = db.collection('users').doc(userCredential.user.email);
       userDocRef.get().then((doc) => {
-        db.collection("users").doc(userCredential.user.email).set({
-          displayName: userCredential.user.displayName,
-          uid: userCredential.user.uid,
-          isGoogleSignIn: true,
-          // events: {
-          //   confirmed: [],
-          //   pending: []
-          // }
-        }, { merge: true })
+        if (doc.data() === undefined) {
+          db.collection("users").doc(userCredential.user.email).set({
+            displayName: userCredential.user.displayName,
+            uid: userCredential.user.uid,
+            isGoogleSignIn: true,
+            events: {
+              confirmed: [],
+              pending: []
+            }
+          }, { merge: true })
+        } else {
+          db.collection("users").doc(userCredential.user.email).set({
+            displayName: userCredential.user.displayName,
+            uid: userCredential.user.uid,
+            isGoogleSignIn: true,
+          }, { merge: true })
+        }
       })
     })
   }
@@ -100,8 +120,9 @@ export function AuthProvider({ children }) {
   }
 
   return (
-    <AuthContext.Provider value={value}>
+    <EventsContext.Provider value={value}>
       {!loading && children}
-    </AuthContext.Provider>
+    </EventsContext.Provider>
   )
 }
+ 

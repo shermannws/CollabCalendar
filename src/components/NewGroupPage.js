@@ -1,20 +1,23 @@
-import React, { useRef, useState, useContext } from "react"
+import React, { useRef, useState } from "react"
 import { Form, Button, Alert, Card } from "react-bootstrap"
 import { useHistory } from "react-router-dom"
 import { useAuth } from "../contexts/AuthContext"
 import { db } from "../firebase"
-import MultipleEmail, {UsersContext} from "./MultipleEmail"
+import MultipleEmail from "./MultipleEmail"
+
+export const UsersContext = React.createContext() 
 
 export default function NewGroupPage() {
 
  const { currentUser } = useAuth()
  const groupNameRef = useRef()
- const usersEmails = useContext(UsersContext)
  const history = useHistory()
  const [loading, setLoading] = useState(false)
  const [error, setError] = useState("")
+ const [emails, setEmails] = useState([])
 
  function handleSubmit(ex) {
+  ex.preventDefault();
 
   const promises = []
   setLoading(true)
@@ -23,10 +26,24 @@ export default function NewGroupPage() {
   promises.push(db.collection("groups").add({
     groupName: groupNameRef.current.value,
     admins: [currentUser.email, ]
-  }).then(function(docRef) {
-    db.collection("groups").doc(docRef.id).update({
-      users: usersEmails
+  }).then( async (docRef) => {
+    await db.collection("groups").doc(docRef.id).set({
+      invitees: emails
+    }, { merge: true })
+    
+    await db.collection("users").doc(currentUser.email).get().then(doc => {
+      let groupsAdminOf = doc.data().groupsAdminOf
+      console.log(groupsAdminOf)
+      if (groupsAdminOf === undefined) {
+        groupsAdminOf = []
+        console.log(123)
+      }
+      groupsAdminOf.unshift(docRef.id)
+      db.collection("users").doc(currentUser.email).update({
+        groupsAdminOf: groupsAdminOf
+      })
     })
+
   }).catch(function(error) {
     console.error("Error adding document: ", error);
   }))
@@ -35,6 +52,7 @@ export default function NewGroupPage() {
   Promise.all(promises)
       .then(() => {
         history.push("/")
+        history.go(0)
       })
       .catch(() => {
         setError("Failed to create group")
@@ -42,8 +60,6 @@ export default function NewGroupPage() {
       .finally(() => {
         setLoading(false)
       })
-  
-   ex.preventDefault();
   }
 
   return (
@@ -62,8 +78,9 @@ export default function NewGroupPage() {
               placeholder="Name your group"
             />
           </Form.Group>
-
-          <MultipleEmail />
+          <UsersContext.Provider value={{emails, setEmails}}>
+            <MultipleEmail />
+          </UsersContext.Provider>   
             
           <Button className="w-100 mt-2" type="submit">
             Create group
