@@ -7,6 +7,7 @@ import NewGroupPage from "./NewGroupPage"
 import Dashboard from "./Dashboard"
 import Profile from "./Profile"
 import UpdateProfile from "./UpdateProfile"
+import ViewGroupPage from "./ViewGroupPage"
 
 export default function NavbarPage() {
   const [error, setError] = useState("")
@@ -56,12 +57,13 @@ export default function NavbarPage() {
           </Navbar>
           {error && <Alert variant="danger">{error}</Alert>}
           
-          <Container className="d-flex align-items-start justify-content-center">
+          <Container className="w-100 d-flex align-items-start justify-content-center">
             <Switch>
               <Route exact path="/" component={Dashboard} />
               <Route path="/profile" component={Profile} />
               <Route path="/update-profile" component={UpdateProfile} />
               <Route path="/new-group-page" component={NewGroupPage} />
+              <Route path="/view-group" component={ViewGroupPage} />
               
             </Switch>
           </Container>

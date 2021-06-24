@@ -28,7 +28,8 @@ export default function NewGroupPage() {
     admins: [currentUser.email, ]
   }).then( async (docRef) => {
     await db.collection("groups").doc(docRef.id).set({
-      invitees: emails
+      invitees: emails,
+      groupId: docRef.id
     }, { merge: true })
     
     await db.collection("users").doc(currentUser.email).get().then(doc => {

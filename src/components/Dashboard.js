@@ -1,15 +1,18 @@
 import React, { useState, useEffect } from "react"
 import { ListGroup } from "react-bootstrap"
-import {MyMonthlyCalendar} from "./Calendar"
+import { MyMonthlyCalendar } from "./Calendar"
 import { useAuth } from "../contexts/AuthContext"
-import { Link } from "react-router-dom"
+import { Link, useHistory } from "react-router-dom"
+import { useEvents } from "../contexts/EventsContext"
 
 import { db } from "../firebase"
 
 export default function Dashboard() {
   const { currentUser } = useAuth()
+  const { setCurrentGroup } = useEvents()
   const [pendingEvents, setPendingEvents] = useState([])
   const [groups, setGroups] = useState([])
+  const history = useHistory()
 
   const fetchEvents = () => {
     const userDocRef = db.collection('users').doc(currentUser.email);
@@ -40,6 +43,11 @@ export default function Dashboard() {
   useEffect(() => {
     fetchEvents();
   }, [])
+
+  function handleGroupSelect(group) {
+    setCurrentGroup(group)
+    history.push("/view-group")
+  }
 
   return (
     <>
@@ -81,7 +89,7 @@ export default function Dashboard() {
             </ListGroup.Item>
           ) : groups.map(group => {
             return (
-              <ListGroup.Item action variant="info">
+              <ListGroup.Item action variant="info" value={group} onClick={()=>handleGroupSelect(group)}>
                 {group.groupName}
               </ListGroup.Item>
           )})}
