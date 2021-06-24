@@ -14,7 +14,7 @@ export default function Dashboard() {
   const fetchEvents = () => {
     const userDocRef = db.collection('users').doc(currentUser.email);
     userDocRef.get().then((doc) => {
-      if (doc.data() !== undefined) {
+      if (doc.data() !== undefined && doc.data().events !== undefined && doc.data().events.pending !== undefined) {
         doc.data().events.pending.forEach(eventId => {
           const eventDocRef = db.collection('events').doc(eventId)
           eventDocRef.get().then((event) => {
