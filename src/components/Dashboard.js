@@ -14,28 +14,26 @@ export default function Dashboard() {
   const [groups, setGroups] = useState([])
   const history = useHistory()
 
-  const fetchEvents = () => {
+  const fetchEvents = async () => {
     const userDocRef = db.collection('users').doc(currentUser.email);
-    userDocRef.get().then((doc) => {
+    await userDocRef.get().then((doc) => {
       if (doc.data() !== undefined && doc.data().events !== undefined && doc.data().events.pending !== undefined) {
-        doc.data().events.pending.forEach(eventId => {
+        doc.data().events.pending.forEach(async(eventId) => {
           const eventDocRef = db.collection('events').doc(eventId)
-          eventDocRef.get().then((event) => {
+          await eventDocRef.get().then((event) => {
             if (event.data() !== undefined) {
               setPendingEvents(pendingEvents => [...pendingEvents, event.data()])
             }
           })
         })
-        
-        if (doc.data().groupsAdminOf) {
-          doc.data().groupsAdminOf.forEach(groupId => {
-            const groupDocRef = db.collection('groups').doc(groupId)
-            groupDocRef.get().then(group => {
-              setGroups(groups => [...groups, group.data()])
-            })
+      }
+      if (doc.data().groupsAdminOf) {
+        doc.data().groupsAdminOf.forEach(async(groupId) => {
+          const groupDocRef = db.collection('groups').doc(groupId)
+          await groupDocRef.get().then(group => {
+            setGroups(groups => [...groups, group.data()])
           })
-        }
-        
+        })
       }
     });
   }
