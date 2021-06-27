@@ -1,6 +1,6 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Badge } from 'react-bootstrap'
-import { format, subHours, startOfMonth } from 'date-fns'
+import { format, startOfMonth } from 'date-fns'
 import {
   MonthlyBody,
   MonthlyDay,
@@ -8,12 +8,42 @@ import {
   MonthlyNav,
   DefaultMonthlyEventItem
 } from '@zach.codes/react-calendar'
-// import '../styles/Calendar.css'
+import { db } from "../firebase"
+import { useAuth } from "../contexts/AuthContext"
+
 
 export const MyMonthlyCalendar = () => {
   let [currentMonth, setCurrentMonth] = useState(
     startOfMonth(new Date())
   );
+
+  const [data, setData] = useState([])
+  const { currentUser } = useAuth()
+
+  async function fetchEvents() {
+    const userDocRef = db.collection('users').doc(currentUser.email);
+    await userDocRef.get().then((doc) => {
+      if (doc.data().events_confirmed !== undefined) {
+        doc.data().events_confirmed.forEach(async (eventid) => {
+  
+          const eventDocRef = db.collection('events').doc(eventid)
+          await eventDocRef.get().then((event) => {
+            setData(data => [...data, 
+              {
+                title: event.data().title, 
+                date: new Date(event.data().confirmed_date)
+              }])
+          })
+        })
+      }
+    })
+
+    
+  }
+
+  useEffect(() => {
+    fetchEvents();
+  }, [])
 
   require('../styles/Calendar.css')
 
@@ -24,14 +54,7 @@ export const MyMonthlyCalendar = () => {
     >
       <Badge className="pt-4"> <MonthlyNav /> </Badge>
       <MonthlyBody
-        events={[
-          // { title: 'Call sherman', date: subHours(new Date(), 2) },
-          // { title: 'Call eugene', date: subHours(new Date(), 1) },
-          // { title: 'Meeting with Bob', date: new Date() },
-          // { title: 'Meeting with Bob', date: new Date() },
-          // { title: 'Meeting with Bob', date: new Date() },
-          // { title: 'Meeting with Bob', date: new Date() }
-        ]}
+        events={data}
       >
         <MonthlyDay className="primary"
           renderDay={data =>

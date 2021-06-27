@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext } from 'react';
 import { ReactMultiEmail, isEmail } from 'react-multi-email';
 import { UsersContext } from './NewGroupPage'
 

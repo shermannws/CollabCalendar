@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from "react"
 import { Button, Alert, Card, Form } from "react-bootstrap"
-import { Link, useHistory } from "react-router-dom"
+import { useHistory } from "react-router-dom"
 import { db } from "../firebase"
 import { useEvents } from "../contexts/EventsContext"
 import firebase from "firebase/app"
@@ -121,8 +121,9 @@ export default function ViewGroupPage() {
           <Card.Text>
             Confirmed Events: {confirmedEvents.length === 0 ? 
                                 "None" : 
-                                confirmedEvents.map(event => <Link to="/view-event-page-1" className="btn btn-secondary mr-2" value={event} variant="secondary">{event.title}</Link>)
-                                //map(event => <Button className="mr-2" value={event} variant="success">{event.title}</Button>)
+                                confirmedEvents.map(event => 
+                                <Button className="mr-2" value={event} variant="success" href="/view-event-page-1" onClick={()=>{setCurrentEvent(event)}}>{event.title}</Button>
+                                )
                               }
           </Card.Text>
 

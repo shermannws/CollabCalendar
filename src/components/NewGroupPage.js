@@ -30,10 +30,6 @@ export default function NewGroupPage() {
     await db.collection("groups").doc(docRef.id).set({
       invitees: emails,
       groupId: docRef.id,
-      events: {
-        confirmed: [],
-        pending: []
-      }
     }, { merge: true })
     
     await db.collection("users").doc(currentUser.email).get().then(async(doc) => {
