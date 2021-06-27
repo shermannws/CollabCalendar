@@ -25,12 +25,12 @@ export const MyMonthlyCalendar = () => {
       <Badge className="pt-4"> <MonthlyNav /> </Badge>
       <MonthlyBody
         events={[
-          { title: 'Call sherman', date: subHours(new Date(), 2) },
-          { title: 'Call eugene', date: subHours(new Date(), 1) },
-          { title: 'Meeting with Bob', date: new Date() },
-          { title: 'Meeting with Bob', date: new Date() },
-          { title: 'Meeting with Bob', date: new Date() },
-          { title: 'Meeting with Bob', date: new Date() }
+          // { title: 'Call sherman', date: subHours(new Date(), 2) },
+          // { title: 'Call eugene', date: subHours(new Date(), 1) },
+          // { title: 'Meeting with Bob', date: new Date() },
+          // { title: 'Meeting with Bob', date: new Date() },
+          // { title: 'Meeting with Bob', date: new Date() },
+          // { title: 'Meeting with Bob', date: new Date() }
         ]}
       >
         <MonthlyDay className="primary"

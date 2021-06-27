@@ -25,19 +25,24 @@ export default function ViewGroupPage() {
   const fetchEvents = () => {
     const groupDocRef = db.collection('groups').doc(currentGroup.groupId);
     groupDocRef.get().then(async(doc) => {
-      doc.data().events.pending.forEach(eventId => {
-        const eventDocRef = db.collection('events').doc(eventId)
-        eventDocRef.get().then((event) => {
-          setPendingEvents(pendingEvents => [...pendingEvents, event.data()])         
+      if (doc.data().events_pending !== undefined ) {
+        doc.data().events_pending.forEach(eventId => {
+          const eventDocRef = db.collection('events').doc(eventId)
+          eventDocRef.get().then((event) => {
+            setPendingEvents(pendingEvents => [...pendingEvents, event.data()])         
+          })
         })
-      })
+      }
 
-      doc.data().events.confirmed.forEach(eventId => {
-        const eventDocRef = db.collection('events').doc(eventId)
-        eventDocRef.get().then((event) => {
-          setConfirmedEvents(confirmedEvents => [...confirmedEvents, event.data()])         
+      if (doc.data().events_confirmed !== undefined ) {
+        doc.data().events_confirmed.forEach(eventId => {
+          const eventDocRef = db.collection('events').doc(eventId)
+          eventDocRef.get().then((event) => {
+            setConfirmedEvents(confirmedEvents => [...confirmedEvents, event.data()])         
+          })
         })
-      })
+      }
+      
     });
   }
 
@@ -66,24 +71,28 @@ export default function ViewGroupPage() {
         is_collaborative: true,
         is_confirmed: false,
         respond_by_date: respondByDateRef.current.value,
-        comfirmed_date: null,
+        confirmed_date: null,
         window_start: startDateRef.current.value,
         window_end: endDateRef.current.value,
       }).then( async (docRef) => {
         await db.collection("events").doc(docRef.id).update({
           id: docRef.id
-        })
-
-        await db.collection("groups").doc(currentGroup.groupId).set({
-          "events.pending": firebase.firestore.FieldValue.arrayUnion(docRef.id)
-        }, { merge: true }).then(async () => {
-          await currentGroup.invitees.forEach(async (user) => {
-            await db.collection("users").doc(user).set({
-              "events.pending": firebase.firestore.FieldValue.arrayUnion(docRef.id)
-            }, { merge: true })
+        }).then(async () => {
+          await db.collection("groups").doc(currentGroup.groupId).set({
+            events_pending: firebase.firestore.FieldValue.arrayUnion(docRef.id)
+          }, { merge: true }).then(async () => {
+            await currentGroup.invitees.forEach(async (user) => {
+              await db.collection("users").doc(user).set({
+                events_pending: firebase.firestore.FieldValue.arrayUnion(docRef.id)
+              }, { merge: true })
+            })
           })
         })
+
+        
       })
+      
+      history.go(0)
     } catch (e) {
       if (e instanceof RangeError) {
         setError("Start date cannot be greater than end date")
@@ -91,16 +100,14 @@ export default function ViewGroupPage() {
         setError("Failed to create this event")
       }
     }
-    setCreateNewEvent(false)
     setLoading(false)
-    history.go(0)
   }
 
   return (
     <>
       <Card className="w-100">
         <Card.Body>
-          {error && <Alert variant="danger">{error}</Alert>}
+          
           <Card.Title>Current Group: <strong>{currentGroup.groupName}</strong></Card.Title>
           <Card.Text>Invitees: {currentGroup.invitees.length === 0 ? "None" : currentGroup.invitees.join(", ")}</Card.Text>
           <Card.Text>
@@ -121,6 +128,7 @@ export default function ViewGroupPage() {
 
           <br/>
           <Button className="mb-4" disabled={createNewEvent} onClick={()=>setCreateNewEvent(true)}>Create new event for this group</Button>
+          {error && <Alert variant="danger">{error}</Alert>}
           {createNewEvent && (
             <Form onSubmit={submitEvent}>
               <Form.Group id="event-name">

@@ -17,8 +17,8 @@ export default function Dashboard() {
   const fetchEvents = async () => {
     const userDocRef = db.collection('users').doc(currentUser.email);
     await userDocRef.get().then((doc) => {
-      if (doc.data() !== undefined && doc.data().events !== undefined && doc.data().events.pending !== undefined) {
-        doc.data().events.pending.forEach(async(eventId) => {
+      if (doc.data() !== undefined && doc.data().events_pending !== undefined) {
+        doc.data().events_pending.forEach(async(eventId) => {
           const eventDocRef = db.collection('events').doc(eventId)
           await eventDocRef.get().then((event) => {
             if (event.data() !== undefined) {
@@ -27,7 +27,7 @@ export default function Dashboard() {
           })
         })
       }
-      if (doc.data().groupsAdminOf) {
+      if (doc.data() !== undefined && doc.data().groupsAdminOf !== undefined) {
         doc.data().groupsAdminOf.forEach(async(groupId) => {
           const groupDocRef = db.collection('groups').doc(groupId)
           await groupDocRef.get().then(group => {

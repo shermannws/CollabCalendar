@@ -25,13 +25,25 @@ export default function ScheduleComponent() {
       setLoading(true)
 
       await db.collection("users").doc(currentUser.email).update({
-        "events.pending": firebase.firestore.FieldValue.arrayRemove(currentEvent.id)
-      })
+        "events_pending": firebase.firestore.FieldValue.arrayRemove(currentEvent.id)
+      }).then(async() => {
+        const eventDocRef = db.collection("events").doc(currentEvent.id)
+        await eventDocRef.get().then(async (doc) => {
+          let newResponses;
+          if (doc.data().responses !== undefined) {
+            newResponses = doc.data().responses
+          } else {
+            newResponses = {}
+          }
+          let editedSchedule = JSON.parse(JSON.stringify(schedule))
 
-      await db.collection("events").doc(currentEvent.id).update({
-        [`responses.${currentUser.email}`]: schedule
-      })
+          newResponses[currentUser.email] = editedSchedule
 
+          await db.collection("events").doc(currentEvent.id).update({
+            responses: newResponses
+          })
+        })
+      })
       history.push("/")
     } catch(e) {
       console.log(e)
