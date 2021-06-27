@@ -9,7 +9,7 @@ import { db } from "../firebase"
 
 export default function Dashboard() {
   const { currentUser } = useAuth()
-  const { setCurrentGroup } = useEvents()
+  const { setCurrentGroup, setCurrentEvent } = useEvents()
   const [pendingEvents, setPendingEvents] = useState([])
   const [groups, setGroups] = useState([])
   const history = useHistory()
@@ -47,6 +47,11 @@ export default function Dashboard() {
     history.push("/view-group")
   }
 
+  function handleEventSelect(event) {
+    setCurrentEvent(event)
+    history.push("/respond-event")
+  }
+
   return (
     <>
       <div className="w-100">
@@ -70,7 +75,7 @@ export default function Dashboard() {
             </ListGroup.Item>
           ) : pendingEvents.map(event => {
             return (
-              <ListGroup.Item action variant="warning">
+              <ListGroup.Item action variant="warning" value={event} onClick={()=>handleEventSelect(event)}>
                 {event.title}
               </ListGroup.Item>
           )})}

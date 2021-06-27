@@ -17,6 +17,7 @@ function App() {
             <PrivateRoute path="/update-profile" component={NavbarPage} />
             <PrivateRoute path="/new-group-page" component={NavbarPage} />
             <PrivateRoute path="/view-group" component={NavbarPage} />
+            <PrivateRoute path="/respond-event" component={NavbarPage} />
 
             <Route path="/signup" component={CoverPage} />
             <Route path="/login" component={CoverPage} />

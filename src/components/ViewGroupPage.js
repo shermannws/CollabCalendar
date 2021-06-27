@@ -63,18 +63,18 @@ export default function ViewGroupPage() {
         is_confirmed: false,
         respond_by_date: respondByDateRef.current.value,
         window_start: startDateRef.current.value,
-        window_end: endDateRef.current.value
+        window_end: endDateRef.current.value,
       }).then( async (docRef) => {
+        await db.collection("events").doc(docRef.id).update({
+          id: docRef.id
+        })
+
         await db.collection("groups").doc(currentGroup.groupId).set({
-          events: {
-            pending: firebase.firestore.FieldValue.arrayUnion(docRef.id)
-          }
+          "events.pending": firebase.firestore.FieldValue.arrayUnion(docRef.id)
         }, { merge: true }).then(async () => {
           await currentGroup.invitees.forEach(async (user) => {
             await db.collection("users").doc(user).set({
-              events: {
-                pending: firebase.firestore.FieldValue.arrayUnion(docRef.id)
-              }
+              "events.pending": firebase.firestore.FieldValue.arrayUnion(docRef.id)
             }, { merge: true })
           })
         })
