@@ -36,7 +36,7 @@ export default function NewGroupPage() {
       }
     }, { merge: true })
     
-    await db.collection("users").doc(currentUser.email).get().then(doc => {
+    await db.collection("users").doc(currentUser.email).get().then(async(doc) => {
       let groupsAdminOf = doc.data().groupsAdminOf
       console.log(groupsAdminOf)
       if (groupsAdminOf === undefined) {
@@ -44,7 +44,7 @@ export default function NewGroupPage() {
         console.log(123)
       }
       groupsAdminOf.unshift(docRef.id)
-      db.collection("users").doc(currentUser.email).update({
+      await db.collection("users").doc(currentUser.email).update({
         groupsAdminOf: groupsAdminOf
       })
     })

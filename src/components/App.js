@@ -3,8 +3,8 @@ import { AuthProvider } from "../contexts/AuthContext"
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom"
 import NavbarPage from "./NavbarPage"
 import PrivateRoute from "./PrivateRoute"
-import CoverPage from "./CoverPage"
 import { EventsProvider } from "../contexts/EventsContext"
+import CoverPage from "./CoverPage"
 
 function App() {
   return (
@@ -17,6 +17,7 @@ function App() {
             <PrivateRoute path="/update-profile" component={NavbarPage} />
             <PrivateRoute path="/new-group-page" component={NavbarPage} />
             <PrivateRoute path="/view-group" component={NavbarPage} />
+            <PrivateRoute path="/view-event-page-1" component={NavbarPage} />
 
             <Route path="/signup" component={CoverPage} />
             <Route path="/login" component={CoverPage} />
