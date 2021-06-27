@@ -8,7 +8,11 @@ import Dashboard from "./Dashboard"
 import Profile from "./Profile"
 import UpdateProfile from "./UpdateProfile"
 import ViewGroupPage from "./ViewGroupPage"
+<<<<<<< HEAD
 import RespondEventPage from "./RespondEventPage"
+=======
+import ViewEventPageFromGroupPage from "./ViewEventPageFromGroupPage"
+>>>>>>> 29649bc7a6d705e3044ad8889efb8110f76780d1
 
 export default function NavbarPage() {
   const [error, setError] = useState("")
@@ -66,7 +70,7 @@ export default function NavbarPage() {
               <Route path="/new-group-page" component={NewGroupPage} />
               <Route path="/view-group" component={ViewGroupPage} />
               <Route path="/respond-event" component={RespondEventPage} />
-              
+              <Route path="/view-event-page-1" component={ViewEventPageFromGroupPage} />
             </Switch>
           </Container>
           

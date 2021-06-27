@@ -1,13 +1,13 @@
 import React, { useState, useEffect, useRef } from "react"
 import { Button, Alert, Card, Form } from "react-bootstrap"
-import { useHistory } from "react-router-dom"
+import { Link, useHistory } from "react-router-dom"
 import { db } from "../firebase"
 import { useEvents } from "../contexts/EventsContext"
 import firebase from "firebase/app"
 
 export default function ViewGroupPage() {
 
-  const { currentGroup } = useEvents()
+  const { currentGroup, setCurrentEvent } = useEvents()
 
   const [error, setError] = useState("")
   const [loading, setLoading] = useState(false)
@@ -52,8 +52,12 @@ export default function ViewGroupPage() {
       setError("")
       setLoading(true)
 
-      //Create new Event and get the event id
-      //Add this event id to this group's pending
+      if (new Date(startDateRef.current.value) > new Date(endDateRef.current.value)) {
+        throw new RangeError()
+      }
+
+      // Create new Event and get the event id
+      // Add this event id to this group's pending
       // for all invitees, add this event id to their pending
       await db.collection("events").add({
         title: nameRef.current.value,
@@ -62,6 +66,7 @@ export default function ViewGroupPage() {
         is_collaborative: true,
         is_confirmed: false,
         respond_by_date: respondByDateRef.current.value,
+        comfirmed_date: null,
         window_start: startDateRef.current.value,
         window_end: endDateRef.current.value,
       }).then( async (docRef) => {
@@ -79,8 +84,12 @@ export default function ViewGroupPage() {
           })
         })
       })
-    } catch {
-      setError("Failed to create this event")
+    } catch (e) {
+      if (e instanceof RangeError) {
+        setError("Start date cannot be greater than end date")
+      } else {
+        setError("Failed to create this event")
+      }
     }
     setCreateNewEvent(false)
     setLoading(false)
@@ -97,13 +106,16 @@ export default function ViewGroupPage() {
           <Card.Text>
             Pending Events: {pendingEvents.length === 0 ? 
                               "None" :
-                              pendingEvents.map(event => <Button className="mr-2" value={event} variant="secondary">{event.title}</Button>)
-                            }
+                              pendingEvents.map(event => 
+                              <Button className="mr-2" value={event} variant="secondary" href="/view-event-page-1" onClick={()=>{setCurrentEvent(event)}}>{event.title}</Button>
+                              )
+                          }
           </Card.Text>
           <Card.Text>
             Confirmed Events: {confirmedEvents.length === 0 ? 
                                 "None" : 
-                                confirmedEvents.map(event => <Button className="mr-2" value={event} variant="success">{event.title}</Button>)
+                                confirmedEvents.map(event => <Link to="/view-event-page-1" className="btn btn-secondary mr-2" value={event} variant="secondary">{event.title}</Link>)
+                                //map(event => <Button className="mr-2" value={event} variant="success">{event.title}</Button>)
                               }
           </Card.Text>
 
