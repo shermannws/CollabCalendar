@@ -40,7 +40,7 @@ export default function Dashboard() {
 
   useEffect(() => {
     fetchEvents();
-  }, [])
+  }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
   function handleGroupSelect(group) {
     setCurrentGroup(group)

@@ -18,7 +18,7 @@ export default function UpdateProfile() {
     db.collection("users").doc(currentUser.email).get().then((doc) => {
       doc.data().isGoogleSignIn ? setIsGoogle(true) : setIsGoogle(false)
     })
-  }, [])
+  }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
   
   function handleSubmit(e) {

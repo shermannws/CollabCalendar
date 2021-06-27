@@ -48,7 +48,7 @@ export default function ViewGroupPage() {
 
   useEffect(() => {
     fetchEvents();
-  }, [])
+  }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
   async function submitEvent(e) {
     e.preventDefault()

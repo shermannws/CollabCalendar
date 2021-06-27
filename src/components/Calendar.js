@@ -37,13 +37,11 @@ export const MyMonthlyCalendar = () => {
         })
       }
     })
-
-    
   }
 
   useEffect(() => {
     fetchEvents();
-  }, [])
+  }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
   require('../styles/Calendar.css')
 
