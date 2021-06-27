@@ -17,11 +17,8 @@ function App() {
             <PrivateRoute path="/update-profile" component={NavbarPage} />
             <PrivateRoute path="/new-group-page" component={NavbarPage} />
             <PrivateRoute path="/view-group" component={NavbarPage} />
-<<<<<<< HEAD
             <PrivateRoute path="/respond-event" component={NavbarPage} />
-=======
             <PrivateRoute path="/view-event-page-1" component={NavbarPage} />
->>>>>>> 29649bc7a6d705e3044ad8889efb8110f76780d1
 
             <Route path="/signup" component={CoverPage} />
             <Route path="/login" component={CoverPage} />

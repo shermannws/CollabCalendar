@@ -8,11 +8,8 @@ import Dashboard from "./Dashboard"
 import Profile from "./Profile"
 import UpdateProfile from "./UpdateProfile"
 import ViewGroupPage from "./ViewGroupPage"
-<<<<<<< HEAD
 import RespondEventPage from "./RespondEventPage"
-=======
 import ViewEventPageFromGroupPage from "./ViewEventPageFromGroupPage"
->>>>>>> 29649bc7a6d705e3044ad8889efb8110f76780d1
 
 export default function NavbarPage() {
   const [error, setError] = useState("")
