@@ -15,19 +15,15 @@ export function AuthProvider({ children }) {
   // Not populating the events field as there might already be pre-existing pending and/or
   // confirmed events before they even sign up
   function signupWithEmail(email, password, name) {
-    return auth.createUserWithEmailAndPassword(email, password).then(userCredential => {
+    return auth.createUserWithEmailAndPassword(email, password).then(async(userCredential) => {
       
-      userCredential.user.updateProfile({
+      await userCredential.user.updateProfile({
         displayName: name
-      }).then(() => {
-        db.collection("users").doc(email).set({
+      }).then(async () => {
+        await db.collection("users").doc(email).set({
           displayName: name,
           uid: userCredential.user.uid,
           isGoogleSignIn: false,
-          // events: {
-          //   confirmed: [],
-          //   pending: []
-          // }
         }, { merge: true })
       })
     })
@@ -40,18 +36,14 @@ export function AuthProvider({ children }) {
   // Not populating the events field as there might already be pre-existing pending and/or
   // confirmed events before they even sign up
   function loginWithGoogle() {
-    return auth.signInWithPopup(new firebase.auth.GoogleAuthProvider()).then(userCredential => {
+    return auth.signInWithPopup(new firebase.auth.GoogleAuthProvider()).then(async(userCredential) => {
       
       const userDocRef = db.collection('users').doc(userCredential.user.email);
-      userDocRef.get().then((doc) => {
+      await userDocRef.get().then((doc) => {
         db.collection("users").doc(userCredential.user.email).set({
           displayName: userCredential.user.displayName,
           uid: userCredential.user.uid,
           isGoogleSignIn: true,
-          // events: {
-          //   confirmed: [],
-          //   pending: []
-          // }
         }, { merge: true })
       })
     })
