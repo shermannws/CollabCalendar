@@ -83,7 +83,7 @@ export default function UpdateProfile() {
                 <Form.Control
                   type="password"
                   ref={passwordRef}
-                  placeholder="Leave blank to keep the same"
+                  placeholder="Accounts logged in with Google are unable to change password."
                   disabled
                 />
               </Form.Group>
@@ -92,7 +92,7 @@ export default function UpdateProfile() {
                 <Form.Control
                   type="password"
                   ref={passwordConfirmRef}
-                  placeholder="Leave blank to keep the same"
+                  placeholder="Accounts logged in with Google are unable to change password."
                   disabled
                 />
               </Form.Group>
