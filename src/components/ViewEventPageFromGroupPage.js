@@ -4,6 +4,7 @@ import { Card, Alert, Button, Form } from "react-bootstrap"
 import { useHistory } from "react-router-dom"
 import { useEvents } from "../contexts/EventsContext"
 import { db } from "../firebase"
+import  ViewScheduleComponent from "./ViewScheduleComponent.js"
 
 export default function ViewEventPageFromGroupPage() {
 
@@ -85,11 +86,10 @@ export default function ViewEventPageFromGroupPage() {
             <Card.Text>Timeframe for event to be held within: <strong>{currentEvent.window_start}</strong> to <strong>{currentEvent.window_end}</strong> </Card.Text>
             <Card.Text>Confirmed date: {currentEvent.confirmed_date === null ? "Not confirmed yet" : currentEvent.confirmed_date}</Card.Text>
             
-            <Alert variant="dark">This is currently a workaround, nicer UI upcoming</Alert>
-            <Card.Text>Responses {currentEvent.responses === undefined ? "No responses yet" : JSON.stringify(currentEvent.responses)}</Card.Text>
-          
+            <ViewScheduleComponent />
+
           {currentEvent.confirmed_date === null && (
-          <Button disabled={confirmEvent} onClick={() => setConfirmEvent(true)}>
+          <Button className="mt-5" disabled={confirmEvent} onClick={() => setConfirmEvent(true)}>
             Confirm a date for the event now!
           </Button>)
           }
