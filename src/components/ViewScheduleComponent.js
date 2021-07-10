@@ -48,7 +48,7 @@ export default function ScheduleComponent() {
   }
 
   useEffect(() => {
-    fetchResponses();
+    fetchResponses()
   }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
   const popover = (invitees) => (

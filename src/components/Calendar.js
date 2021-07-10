@@ -10,7 +10,7 @@ import {
 } from '@zach.codes/react-calendar'
 import { db } from "../firebase"
 import { useAuth } from "../contexts/AuthContext"
-
+import '../styles/Calendar.css'
 
 export const MyMonthlyCalendar = () => {
   let [currentMonth, setCurrentMonth] = useState(
@@ -43,7 +43,6 @@ export const MyMonthlyCalendar = () => {
     fetchEvents();
   }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
-  require('../styles/Calendar.css')
 
   return (
     <MonthlyCalendar

@@ -12,7 +12,7 @@ export default function CoverPage() {
   return (
     <>
       <Container
-      className="d-flex align-items-center justify-content-center"
+      className="d-flex -items-center justify-content-center"
       style={{ minHeight: "100vh" }}
       >
         <div className="w-100">

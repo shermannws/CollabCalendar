@@ -2,10 +2,11 @@ import React, { useState, useEffect } from "react"
 import { ListGroup } from "react-bootstrap"
 import { MyMonthlyCalendar } from "./Calendar"
 import { useAuth } from "../contexts/AuthContext"
-import { Link, useHistory } from "react-router-dom"
+import { useHistory } from "react-router-dom"
 import { useEvents } from "../contexts/EventsContext"
 
 import { db } from "../firebase"
+import plusSign from "../images/plus-sign.svg"
 
 export default function Dashboard() {
   const { currentUser } = useAuth()
@@ -58,10 +59,6 @@ export default function Dashboard() {
         <div className="w-100 mb-5">
           <MyMonthlyCalendar/>       
         </div>
-        <Link to = "/new-group-page" 
-          className="btn btn-primary w-100 mt-2 mb-4 p-2">
-            Create new group
-        </Link>
       </div>
 
       <div className="w-50 pl-5 mt-5">
@@ -83,7 +80,10 @@ export default function Dashboard() {
         </ListGroup>
 
         <ListGroup className="w-100 mb-5">
-          <ListGroup.Item><strong>My Groups</strong></ListGroup.Item>
+          <ListGroup.Item className="w-100 d-flex">
+            <strong className="w-100">My Groups</strong>
+            <a href="/new-group-page"><img width={30} src={plusSign} alt="add new group"></img></a>
+          </ListGroup.Item>
 
           {groups.length === 0 ? 
           (
