@@ -61,6 +61,10 @@ export default function ViewGroupPage() {
         throw new RangeError()
       }
 
+      if (new Date(respondByDateRef.current.value) < new Date()) {
+        throw new RangeError()
+      }
+
       // Create new Event and get the event id
       // Add this event id to this group's pending
       // for all invitees, add this event id to their pending
@@ -95,7 +99,14 @@ export default function ViewGroupPage() {
       history.go(0)
     } catch (e) {
       if (e instanceof RangeError) {
-        setError("Start date cannot be greater than end date")
+        
+        if (new Date(startDateRef.current.value) > new Date(endDateRef.current.value)) {
+          setError("Start date cannot be greater than end date")
+        }
+  
+        if (new Date(respondByDateRef.current.value) < new Date()) {
+          setError("Respond by date cannot be in the past")
+        }
       } else {
         setError("Failed to create this event")
       }
