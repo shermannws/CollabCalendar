@@ -13,8 +13,63 @@ export default function ViewEventPageFromGroupPage() {
     const [confirmEvent, setConfirmEvent] = useState(false)
     const [loading, setLoading] = useState(false)
     const history = useHistory()
+    const [syncToGoogle, setSyncToGoogle] = useState(true)
 
     const dateRef = useRef()
+
+    var gapi = window.gapi
+    var CLIENT_ID = process.env.REACT_APP_GOOGLE_CLIENT_ID
+    var API_KEY = process.env.REACT_APP_GOOGLE_API_KEY
+    var DISCOVERY_DOCS = ["https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest"]
+    var SCOPES = "https://www.googleapis.com/auth/calendar.events"
+
+    const handleClick = (name, date, invitees) => {
+      gapi.load('client:auth2', () => {
+        console.log('loaded client')
+  
+        gapi.client.init({
+          apiKey: API_KEY,
+          clientId: CLIENT_ID,
+          discoveryDocs: DISCOVERY_DOCS,
+          scope: SCOPES,
+        })
+  
+        gapi.client.load('calendar', 'v3', () => console.log('loaded v3 api'))
+  
+        gapi.auth2.getAuthInstance().signIn()
+        .then(() => {
+          
+          let attendees = invitees.map(each => {
+            return {'email': each}
+          })
+
+          var event = {
+            'summary': name,
+            'description': 'Added through Collab Calendar',
+            'start': {
+              'dateTime': new Date(date).toISOString(),
+            },
+            'end': {
+              'dateTime': new Date(date).toISOString(),
+            },
+            'attendees': attendees,
+            'reminders': {
+              'useDefault': true
+            }
+          }
+  
+          var request = gapi.client.calendar.events.insert({
+            'calendarId': 'primary',
+            'resource': event,
+          })
+  
+          request.execute(event => {
+            console.log(event)
+            window.open(event.htmlLink)
+          })
+        })
+      })
+    }
 
     async function submitEvent(e) {
       e.preventDefault()
@@ -22,7 +77,7 @@ export default function ViewEventPageFromGroupPage() {
       try {
         setError("")
         setLoading(true)
-
+        
         //update the current event to the confirmed date
         //for each invitee,
           // add the event to confirmed
@@ -59,8 +114,12 @@ export default function ViewEventPageFromGroupPage() {
             events_confirmed: firebase.firestore.FieldValue.arrayUnion(currentEvent.id),
             events_pending: firebase.firestore.FieldValue.arrayRemove(currentEvent.id)
           })
-        })
 
+          console.log(syncToGoogle)
+          if (syncToGoogle) {
+            handleClick(currentEvent.title, dateRef.current.value, listOfCurrentInvitees)
+          }
+        })
 
         history.push("/view-group")
       } catch {
@@ -100,6 +159,9 @@ export default function ViewEventPageFromGroupPage() {
                 <Form.Group id="date">
                   <Form.Label>Confirmed Date for Event</Form.Label>
                   <Form.Control type="datetime-local" ref={dateRef} required />
+                </Form.Group>
+                <Form.Group className="mb-3" controlId="formBasicCheckbox">
+                  <Form.Check type="checkbox" checked={syncToGoogle} onChange={()=>{setSyncToGoogle(!syncToGoogle);}} label="Sync with my Google Calendar" />
                 </Form.Group>
 
                 <Button disabled={loading} className="w-100" type="submit">
