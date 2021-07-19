@@ -155,11 +155,11 @@ export default function ViewGroupPage() {
 
               <Form.Row>
                 <Form.Group className="mr-4" sm={12} id="timeframe">
-                  <Form.Label>Window Start</Form.Label>
+                  <Form.Label>Get availabilities <b>From</b></Form.Label>
                   <Form.Control type="date" ref={startDateRef} required />
                 </Form.Group>
                 <Form.Group sm={12} id="timeframe">
-                  <Form.Label>End</Form.Label>
+                  <Form.Label><b>To</b></Form.Label>
                   <Form.Control type="date" ref={endDateRef} required />
                 </Form.Group>
               </Form.Row>
