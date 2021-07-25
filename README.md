@@ -4,9 +4,9 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
 This web application is part of a NUS module, Orbital 2021. The detailed README can be found together with the submission instead.
 
 ## Getting Started
-To run this programme locally, kindly clone this repository to your local computer.
-Run `npm install` to install all the dependencies for this project
-Run `npm start` to start a local development mode on localhost:3000
+To run this programme locally, kindly clone this repository to your local computer.<br/>
+Run `npm install` to install all the dependencies for this project.<br/>
+Run `npm start` to start a local development mode on localhost:3000.<br/>
 
 ## Powered By
 This web application is designed using React, Firebase and Node.js.
