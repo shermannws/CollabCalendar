@@ -7,6 +7,8 @@ This web application is part of a NUS module, Orbital 2021. The detailed README 
 To run this programme locally, kindly clone this repository to your local computer.<br/>
 Run `npm install` to install all the dependencies for this project.<br/>
 Run `npm start` to start a local development mode on localhost:3000.<br/>
+<br/>
+The application is also hosted on vercel, feel free to test it out at https://collab-calendar.vercel.app/login
 
 ## Powered By
 This web application is designed using React, Firebase and Node.js.
