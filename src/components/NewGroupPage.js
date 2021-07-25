@@ -3,6 +3,7 @@ import { Form, Button, Alert, Card } from "react-bootstrap"
 import { useHistory } from "react-router-dom"
 import { useAuth } from "../contexts/AuthContext"
 import { db } from "../firebase"
+import SendEmail from "../mailgun"
 import MultipleEmail from "./MultipleEmail"
 
 export const UsersContext = React.createContext() 
@@ -51,7 +52,18 @@ export default function NewGroupPage() {
   
 
   Promise.all(promises)
-      .then(() => {
+      .then(async () => {
+        await emails.forEach(async(email) => {
+          const doc = db.collection('users').doc(email)
+          await doc.get().then((docData) => {
+            if (!docData.exists) {
+              SendEmail(email, "invitetoccemail", "Invitation to CollabCalendar", currentUser.displayName)
+            }
+          }).catch((fail) => {
+            console.error("Error in sending email invites", error)
+          });
+        })
+        
         history.push("/")
         history.go(0)
       })

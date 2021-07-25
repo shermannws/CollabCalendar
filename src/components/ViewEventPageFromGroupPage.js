@@ -5,6 +5,7 @@ import { useHistory } from "react-router-dom"
 import { useEvents } from "../contexts/EventsContext"
 import { db } from "../firebase"
 import  ViewScheduleComponent from "./ViewScheduleComponent.js"
+import SendEmail from "../mailgun"
 
 export default function ViewEventPageFromGroupPage() {
 
@@ -114,7 +115,8 @@ export default function ViewEventPageFromGroupPage() {
             events_confirmed: firebase.firestore.FieldValue.arrayUnion(currentEvent.id),
             events_pending: firebase.firestore.FieldValue.arrayRemove(currentEvent.id)
           })
-
+          
+          currentGroup.invitees.forEach((user) => SendEmail(user, "eventcomfirmemail", "New Event Comfirmation", "there"))
           console.log(syncToGoogle)
           if (syncToGoogle) {
             handleClick(currentEvent.title, dateRef.current.value, listOfCurrentInvitees)

@@ -2,6 +2,7 @@ import React, { useRef, useState } from "react"
 import { Form, Button, Card, Alert } from "react-bootstrap"
 import { useAuth } from "../contexts/AuthContext"
 import { Link, useHistory } from "react-router-dom"
+import SendEmail from "../mailgun"
 
 export default function Signup() {
   const nameRef = useRef()
@@ -24,6 +25,7 @@ export default function Signup() {
       setError("")
       setLoading(true)
       await signupWithEmail(emailRef.current.value, passwordRef.current.value, nameRef.current.value)
+      SendEmail(emailRef.current.value, "welcomeemail", "Welcome to CollabCalendar", nameRef.current.value)
       history.push("/")
     } catch {
       setError("Failed to create an account")
