@@ -1,4 +1,8 @@
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+# CollabCalendar
+
+This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).<br />
+This is done as part of an Orbital Project by Sherman Ng and Eugene Lim over Summer 2021.
+
 
 ## Available Scripts
 

@@ -4,6 +4,7 @@ import { useAuth } from "../contexts/AuthContext"
 import { Link, useHistory } from "react-router-dom"
 import { db } from "../firebase"
 
+// returns the functional component to update a user's profile
 export default function UpdateProfile() {
   const nameRef = useRef()
   const passwordRef = useRef()
@@ -20,7 +21,7 @@ export default function UpdateProfile() {
     })
   }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
-  
+  // method to handle the updating of user profile
   function handleSubmit(e) {
     e.preventDefault()
     if (passwordRef.current.value !== passwordConfirmRef.current.value) {
@@ -31,9 +32,11 @@ export default function UpdateProfile() {
     setLoading(true)
     setError("")
 
+    // if no changes to password, nothing is done
     if (passwordRef.current.value) {
       promises.push(updatePassword(passwordRef.current.value))
     }
+    // if there is a change in display name, then only is a promise pushed
     if (nameRef.current.value !== currentUser.displayName) {
       promises.push(updateDisplayName(nameRef.current.value))
     }

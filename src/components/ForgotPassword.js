@@ -3,6 +3,7 @@ import { Form, Button, Card, Alert } from "react-bootstrap"
 import { useAuth } from "../contexts/AuthContext"
 import { Link } from "react-router-dom"
 
+// returns the functional component that displays the UI for the forgot password page
 export default function ForgotPassword() {
   const emailRef = useRef()
   const { resetPassword } = useAuth()
@@ -10,6 +11,7 @@ export default function ForgotPassword() {
   const [message, setMessage] = useState("")
   const [loading, setLoading] = useState(false)
 
+  // onClick method to help submit the form and reset the password
   async function handleSubmit(e) {
     e.preventDefault()
 

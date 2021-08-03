@@ -4,6 +4,7 @@ import { useEvents } from "../contexts/EventsContext"
 
 import  ScheduleComponent from "./ScheduleComponent.js"
 
+// returns the functional component that shows the details of the group that is currently being viewed by the user
 export default function ViewGroupPage() {
 
   const [respondEvent, setRespondEvent] = useState(false)

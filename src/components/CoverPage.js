@@ -7,6 +7,7 @@ import Login from "./Login"
 import ForgotPassword from "./ForgotPassword"
 import { Switch, Route } from "react-router-dom"
 
+// returns the functional component template of the cover page that the login page, signup page and forgotpassword page uses.
 export default function CoverPage() {
 
   return (

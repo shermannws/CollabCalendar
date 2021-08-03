@@ -7,6 +7,7 @@ import { useHistory } from "react-router-dom"
 import { db } from "../firebase"
 import firebase from "firebase/app"
 
+// returns the functional component that allows for user to indicate their availabilities using an interactive tool
 export default function ScheduleComponent() {
   const { currentEvent } = useEvents()
   const { currentUser } = useAuth()
@@ -15,10 +16,12 @@ export default function ScheduleComponent() {
   const [loading, setLoading] = useState(false)
   const history = useHistory()
   
+  // for each change in the schedule to update the schedule state
   function handleChange(newSchedule) {
     setSchedule(newSchedule)
   }
 
+  // method to handle the updating of the user's availabilities
   async function handleSubmit() {
     try {
       setError("")

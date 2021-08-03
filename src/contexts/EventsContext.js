@@ -1,7 +1,6 @@
 import React, { useContext, useState, useEffect } from "react"
-// import { db } from "../firebase"
-// import firebase from "firebase/app"
 
+// initialisting the events context
 const EventsContext = React.createContext()
 
 export function useEvents() {
@@ -24,6 +23,7 @@ export function EventsProvider({ children }) {
     setCurrentEvent,
   }
 
+  // returns the Context Provider in order for components that import the events context to see the "values"
   return (
     <EventsContext.Provider value={value}>
       {children}

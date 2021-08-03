@@ -4,6 +4,7 @@ import { useAuth } from "../contexts/AuthContext"
 import { Link, useHistory } from "react-router-dom"
 import googleicon from "../images/google-icon.svg"
 
+// returns the function component that show the login form on the login page
 export default function Login() {
   const emailRef = useRef()
   const passwordRef = useRef()
@@ -12,6 +13,7 @@ export default function Login() {
   const [loading, setLoading] = useState(false)
   const history = useHistory()
 
+  // onSubmit method to help submit the form when the submit button is pressed
   async function handleSubmit(e) {
     e.preventDefault()
 
@@ -27,6 +29,7 @@ export default function Login() {
     setLoading(false)
   }
 
+  // onClick method to help redirect user to log in with google
   async function handleGoogleSignIn(e) {
     e.preventDefault()
 

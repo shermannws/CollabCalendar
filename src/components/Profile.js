@@ -3,6 +3,7 @@ import { Card, Alert } from "react-bootstrap"
 import { useAuth } from "../contexts/AuthContext"
 import { Link } from "react-router-dom"
 
+// returns a functional component that displays the current users profile details
 export default function Profile() {
   const { currentUser } = useAuth()
   const [error] = useState("")

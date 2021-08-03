@@ -11,11 +11,13 @@ import ViewGroupPage from "./ViewGroupPage"
 import RespondEventPage from "./RespondEventPage"
 import ViewEventPageFromGroupPage from "./ViewEventPageFromGroupPage"
 
+// returns the functional component of the navbar to be used in all pages after a user logs in
 export default function NavbarPage() {
   const [error, setError] = useState("")
   const { currentUser, logout } = useAuth()
   const history = useHistory()
 
+  // method to log user out
   async function handleLogout() {
     setError("")
 

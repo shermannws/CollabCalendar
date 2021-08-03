@@ -12,6 +12,7 @@ import { db } from "../firebase"
 import { useAuth } from "../contexts/AuthContext"
 import '../styles/Calendar.css'
 
+// Returns the Calendar functional component
 export const MyMonthlyCalendar = () => {
   let [currentMonth, setCurrentMonth] = useState(
     startOfMonth(new Date())
@@ -20,6 +21,7 @@ export const MyMonthlyCalendar = () => {
   const [data, setData] = useState([])
   const { currentUser } = useAuth()
 
+  // Method to fetch all the relevant details at once to populate the calendar with the necessary details
   async function fetchEvents() {
     const userDocRef = db.collection('users').doc(currentUser.email);
     await userDocRef.get().then((doc) => {

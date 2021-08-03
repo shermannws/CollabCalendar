@@ -3,6 +3,7 @@ import ScheduleSelector from "react-schedule-selector"
 import { useEvents } from "../contexts/EventsContext"
 import { Popover, OverlayTrigger, Button } from 'react-bootstrap'
 
+// returns the functional component that allows group admins to view the indicated availabilities of the invitees
 export default function ScheduleComponent() {
   const { currentEvent } = useEvents()
   const [schedule, setSchedule] = useState([])

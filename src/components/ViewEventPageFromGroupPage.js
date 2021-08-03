@@ -7,6 +7,8 @@ import { db } from "../firebase"
 import  ViewScheduleComponent from "./ViewScheduleComponent.js"
 import SendEmail from "../mailgun"
 
+// returns the functional component of viewing an event page extended from the group page, viewed only by the admin
+// the admins are also able to confirm the date of an event from this page.
 export default function ViewEventPageFromGroupPage() {
 
     const { currentEvent, currentGroup } = useEvents()
@@ -24,6 +26,7 @@ export default function ViewEventPageFromGroupPage() {
     var DISCOVERY_DOCS = ["https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest"]
     var SCOPES = "https://www.googleapis.com/auth/calendar.events"
 
+    // method to update the event to one's google calendar
     const handleClick = (name, date, invitees) => {
       gapi.load('client:auth2', () => {
         console.log('loaded client')
@@ -72,6 +75,8 @@ export default function ViewEventPageFromGroupPage() {
       })
     }
 
+    // method to handle the submit of the confirmation of an event date
+    // Google calendar will also be updated if the option is checked
     async function submitEvent(e) {
       e.preventDefault()
 

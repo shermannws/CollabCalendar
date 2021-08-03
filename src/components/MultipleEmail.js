@@ -2,6 +2,7 @@ import React, { useContext } from 'react';
 import { ReactMultiEmail, isEmail } from 'react-multi-email';
 import { UsersContext } from './NewGroupPage'
 
+// returns the functional component to display multiple email in the same placeholder
 export default function MultipleEmail() {
   require("react-multi-email/style.css")
   const { emails, setEmails } = useContext(UsersContext)

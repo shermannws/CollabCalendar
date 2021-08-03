@@ -4,6 +4,7 @@ import { useAuth } from "../contexts/AuthContext"
 import { Link, useHistory } from "react-router-dom"
 import SendEmail from "../mailgun"
 
+// returns the functional component of signing an user up in the app
 export default function Signup() {
   const nameRef = useRef()
   const emailRef = useRef()
@@ -14,6 +15,7 @@ export default function Signup() {
   const [loading, setLoading] = useState(false)
   const history = useHistory()
 
+  // method to help handle the submission of the form and sign the user up
   async function handleSubmit(e) {
     e.preventDefault()
 

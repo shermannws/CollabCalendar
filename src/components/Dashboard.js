@@ -8,6 +8,7 @@ import { useEvents } from "../contexts/EventsContext"
 import { db } from "../firebase"
 import plusSign from "../images/plus-sign.svg"
 
+// returns the functional dashboard component
 export default function Dashboard() {
   const { currentUser } = useAuth()
   const { setCurrentGroup, setCurrentEvent } = useEvents()
@@ -15,6 +16,7 @@ export default function Dashboard() {
   const [groups, setGroups] = useState([])
   const history = useHistory()
 
+  // method that fetches data from the database in order to obtain the relevant details to populate the dashboard.
   const fetchEvents = async () => {
     const userDocRef = db.collection('users').doc(currentUser.email);
     await userDocRef.get().then((doc) => {
@@ -43,11 +45,13 @@ export default function Dashboard() {
     fetchEvents();
   }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
+  // onClick method that is employed to navigate to /view-group page
   function handleGroupSelect(group) {
     setCurrentGroup(group)
     history.push("/view-group")
   }
 
+  // onClick method that is employed to navigate to /respond-event page
   function handleEventSelect(event) {
     setCurrentEvent(event)
     history.push("/respond-event")

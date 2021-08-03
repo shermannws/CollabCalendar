@@ -6,6 +6,7 @@ import { useEvents } from "../contexts/EventsContext"
 import firebase from "firebase/app"
 import SendEmail from "../mailgun"
 
+// returns the functional component of viewing the details of a group and creating of events tagged to the group
 export default function ViewGroupPage() {
 
   const { currentGroup, setCurrentEvent } = useEvents()
@@ -23,6 +24,7 @@ export default function ViewGroupPage() {
 
   const history = useHistory()
 
+  // method to invoke to fetch the necessary and relevant information to populate the page with the respective information
   const fetchEvents = () => {
     const groupDocRef = db.collection('groups').doc(currentGroup.groupId);
     groupDocRef.get().then(async(doc) => {
@@ -51,6 +53,7 @@ export default function ViewGroupPage() {
     fetchEvents();
   }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
+  // methods to handle the creation of a new event tagged to this group
   async function submitEvent(e) {
     e.preventDefault()
 

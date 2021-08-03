@@ -6,8 +6,10 @@ import { db } from "../firebase"
 import SendEmail from "../mailgun"
 import MultipleEmail from "./MultipleEmail"
 
+// Initialisation of UsersContext in order for MultipleEmails components to gain access to the users
 export const UsersContext = React.createContext() 
 
+// retruns the functional component of the page to create a new group
 export default function NewGroupPage() {
 
  const { currentUser } = useAuth()
@@ -17,6 +19,7 @@ export default function NewGroupPage() {
  const [error, setError] = useState("")
  const [emails, setEmails] = useState([])
 
+ // method to handle the creation of the group based on the emails that are inivited and the name of the group
  function handleSubmit(ex) {
   ex.preventDefault();
 
