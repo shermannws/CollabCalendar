@@ -69,8 +69,8 @@ export default function ViewGroupPage() {
         throw new RangeError()
       }
 
-      currentGroup.invitees.forEach((user) => SendEmail(user, "inviteemail", "New Event Invite", "there")) 
-
+      currentGroup.invitees.forEach((user) => SendEmail(user, "inviteemail", "New Event Invite", "there"))
+       
       // Create new Event and get the event id
       // Add this event id to this group's pending
       // for all invitees, add this event id to their pending
@@ -99,7 +99,7 @@ export default function ViewGroupPage() {
           })
         })
       })
-           
+        
       history.go(0)
     } catch (e) {
       if (e instanceof RangeError) {

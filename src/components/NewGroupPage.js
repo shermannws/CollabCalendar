@@ -53,7 +53,7 @@ export default function NewGroupPage() {
     console.error("Error adding document: ", error);
   }))
   
-
+  // sending invite to CollabCalendar emails to those emails that are not in our database yet
   Promise.all(promises)
       .then(async () => {
         await emails.forEach(async(email) => {

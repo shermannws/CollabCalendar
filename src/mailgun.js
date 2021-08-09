@@ -11,7 +11,7 @@ const mailgun = require('mailgun-js')({ apiKey: api_key, domain: domain});
 // - username: a string representing the name of the recipient
 export default function SendEmail(emailTo, templateToUse, subject, username) {
     const data = {
-        from: "Mailgun Sandbox <postmaster@sandboxe85e23368c4c436db4e8eaa439b4a881.mailgun.org>",
+        from: "Mailgun Sandbox <postmaster@sandbox727a14bb853641ec98fa086c9c0835d8.mailgun.org>",
         to: emailTo,
         template: templateToUse,
         subject: subject,
