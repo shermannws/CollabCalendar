@@ -1,3 +1,5 @@
+Kindly refer here for the README for this project: https://docs.google.com/document/d/1JCFvX3xOoopFkUMZF-rKBawBM7qx31zUXSdF_VQnTRM/edit?usp=sharing
+
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 ## Redirection to our README
